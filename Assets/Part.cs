@@ -13,6 +13,8 @@ public class Part : MonoBehaviour
 
     bool selected;
 
+    bool empty;
+
     public axleManager AM;
 
     public selectedBox SB;
@@ -23,12 +25,15 @@ public class Part : MonoBehaviour
     {
         this.sr = GetComponent<SpriteRenderer>();
         setSprite(this.sprite);
+        selected = false;
     }
 
     private void Update()
     {
-        if (AM.getSelectedInd() != index)  
+        if (selected)  
         {
+            SB.turnSelected();
+        } else {
             SB.turnDeselected();
         }
     }
@@ -64,6 +69,14 @@ public class Part : MonoBehaviour
         this.sr.sprite = sprite;
     }
 
+    public bool getEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(bool empty) {
+        this.empty = empty;
+    }
+
     public void OnMouseDown()
     {
         if (Input.GetMouseButton(0)) 
@@ -71,15 +84,21 @@ public class Part : MonoBehaviour
 
             if (!selected && AM.getSelectedInd() != index) // something else is selected or nothing is selected
             {
+                if (AM.getSelectedInd() >= 0) {
+                    AM.setPartSelected(AM.getSelectedInd(), false);
+                }
+                
                 AM.setSelectedInd(index);
                 selected = true;
-                SB.turnSelected();
+                Debug.Log("part " + index + " was selected!");
             } else if (selected && AM.getSelectedInd() == index) // click the same thing twice to deselect
             {
                 AM.setSelectedInd(-1);
                 selected = false;
-                SB.turnDeselected();
-            } 
+                Debug.Log("part " + index + " was deselected!");
+            } else {
+                selected = false;
+            }
         }
     }
 }

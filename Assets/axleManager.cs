@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class axleManager : MonoBehaviour
 {
-    public static int numSlots = 14;
+    public static int numSlots = 12;
     public Part[] parts = new Part[numSlots]; 
     public int selectedSlotNum;
     public int partsGap = 10;
@@ -15,13 +15,15 @@ public class axleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        selectedSlotNum = -1;
         for (int i = 0; i < numSlots; i++)
         {
-            Vector2 position = (new Vector3( partsGap * i, 0, 0)) + startingPoint.transform.position;
+            Vector3 position = (new Vector3( partsGap * i, 0, 1)) + startingPoint.transform.position;
             Part part = Instantiate<Part>(DefaultPart, position, Quaternion.identity);
             part.setIndex(i);
             part.setName("name");
             part.setSelected(false);
+            part.setEmpty(true);
             parts[i] = part;
 
         }
@@ -35,6 +37,10 @@ public class axleManager : MonoBehaviour
     {
         
 
+    }
+
+    public Part[] getParts() {
+        return parts;
     }
 
     public int getSelectedInd()
@@ -53,12 +59,29 @@ public class axleManager : MonoBehaviour
         {
             parts[selectedSlotNum].setSprite(sprite);
             parts[selectedSlotNum].setName(sprite.name);
+            parts[selectedSlotNum].setEmpty(false);
             Debug.Log(printParts());
         } else
         {
             Debug.Log("no selected part!");
         }
         
+    }
+
+    public void remove(Sprite sprite) {
+        parts[selectedSlotNum].setSprite(sprite);
+        parts[selectedSlotNum].setEmpty(true);
+    }
+
+    public void removeAll(Sprite sprite) {
+        for (int i = 0; i < parts.Length; i++) {
+            parts[i].setSprite(sprite);
+            parts[i].setEmpty(true);
+        }
+    }
+
+    public void setPartSelected(int index, bool selected) {
+        parts[index].setSelected(selected);
     }
 
     string printParts()
