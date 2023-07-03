@@ -70,12 +70,14 @@ public class axleManager : MonoBehaviour
 
     public void remove(Sprite sprite) {
         parts[selectedSlotNum].setSprite(sprite);
+        parts[selectedSlotNum].setName(sprite.name);
         parts[selectedSlotNum].setEmpty(true);
     }
 
     public void removeAll(Sprite sprite) {
         for (int i = 0; i < parts.Length; i++) {
             parts[i].setSprite(sprite);
+            parts[selectedSlotNum].setName(sprite.name);
             parts[i].setEmpty(true);
         }
     }

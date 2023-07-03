@@ -11,9 +11,9 @@ public class Part : MonoBehaviour
     public Sprite sprite;
     public int index;
 
-    bool selected;
+    public bool selected;
 
-    bool empty;
+    public bool empty;
 
     public axleManager AM;
 
@@ -26,6 +26,7 @@ public class Part : MonoBehaviour
         this.sr = GetComponent<SpriteRenderer>();
         setSprite(this.sprite);
         selected = false;
+        empty = true;
     }
 
     private void Update()
@@ -77,6 +78,10 @@ public class Part : MonoBehaviour
         this.empty = empty;
     }
 
+    public string toString() {
+        return name;
+    }
+
     public void OnMouseDown()
     {
         if (Input.GetMouseButton(0)) 
@@ -90,14 +95,17 @@ public class Part : MonoBehaviour
                 
                 AM.setSelectedInd(index);
                 selected = true;
+                // empty = false;
                 Debug.Log("part " + index + " was selected!");
             } else if (selected && AM.getSelectedInd() == index) // click the same thing twice to deselect
             {
                 AM.setSelectedInd(-1);
                 selected = false;
+                // empty = true;
                 Debug.Log("part " + index + " was deselected!");
             } else {
                 selected = false;
+                // empty = true;
             }
         }
     }
