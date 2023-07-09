@@ -29,8 +29,8 @@ public class checkBuild : MonoBehaviour
     }
 
     private List<Part> consolidateParts() {
-        
 
+        finalParts.Clear();
         parts = AM.getParts();
 
         foreach (Part part in parts) {
@@ -41,7 +41,7 @@ public class checkBuild : MonoBehaviour
         }
 
 
-   
+       
         return finalParts;
         
     }
@@ -69,14 +69,16 @@ public class checkBuild : MonoBehaviour
 
 
             foreach (int i in cChanIndices) {
-                Debug.Log(onTheLeft(i, "bearingFlat") || onTheRight(i, "bearingFlat"));
+                //Debug.Log(onTheLeft(i, "bearingFlat") || onTheRight(i, "bearingFlat"));
 
                 if (!nextTo(i, "bearingFlat")) { // if there are no bearing flats next to any c-channel
                     //Debug.Log("not next to a bearing flat");
                     errors.Add("To provide your axles with optimal support, you should have at least one bearing flat flush against any c-channel.");
 
-                    if (!nextTo(i, "washer") || !nextTo(i, "spacer")) // if there's no bearing flats, check if there's any washers (earlier washer check)
+                    if (!nextTo(i, "washer") && !nextTo(i, "spacer") && cChanIndices.Count > 1) // if there's no bearing flats, check if there's any washers (earlier washer check)
                     {
+                        //Debug.Log("next to washer: " + nextTo(i, "washer"));
+                        //Debug.Log("next to spacer: " + nextTo(i, "spacer"));
                         errors.Add("To reduce friction between spinning parts, it's always good to put washers between parts that are meant to spin with the axle and metal parts (for example, a shaft collar and a c-channel.");
                         break;
                     }
@@ -86,20 +88,6 @@ public class checkBuild : MonoBehaviour
 
                 
             }
-
-
-            //if (countPart("shaftCollar") == 1)
-            //{
-            //    //List<int> shaftCollarIndices = findPartIndex("shaftCollar");
-                
-            //    if (!surroundedBy(shaftCollarIndices[0], cChanIndices)) { // assuming you've placed only 1 shaft collar 
-            //        errors.Add("If you have placed only 1 shaft collar, it needs to be placed between two c-channels so that the axle is 'locked' in place.");
-            //    }
-            //}
-            //else
-            //{
-            //    errors.Add("You need at least one shaft collar strategically placed on your axle, since without it, your axle will fall out of the motor very quickly.");
-            //}
 
 
         }
@@ -112,7 +100,7 @@ public class checkBuild : MonoBehaviour
 
             foreach (int i in bearingFlatIndices)
             {
-                if (!nextTo(i, "washer") || !nextTo(i, "spacer"))
+                if (!nextTo(i, "washer") && !nextTo(i, "spacer"))
                 {
                     errors.Add("Another use of washers is to reduce friction between parts that are meant to spin on the axle and bearing flats.");
                     break;
@@ -128,9 +116,10 @@ public class checkBuild : MonoBehaviour
 
             foreach (int i in wheelIndices)
             {
-                if (!nextTo(i, "spacer") || !nextTo(i, "shaftCollar")) // if the wheel is not next to any de facto spacers
+                if (!nextTo(i, "spacer") && !nextTo(i, "shaftCollar")) // if the wheel is not next to any de facto spacers
                 {
                     errors.Add("If the wheel is placed flush against a bearing flat or c-channel, it might rub unnecessarily against the parts and create friction. So, it's nice to have a spacer (or a shaft collar) to create some breathing room.");
+                    break;
                 }
             } // all other positions of spacers are okay or are already checked for in the previous errors.
 
@@ -168,8 +157,9 @@ public class checkBuild : MonoBehaviour
                 }
             }
 
-
-            if (!oneCollarBetweenChannels || collarOutsideCount < 2)
+            Debug.Log("is this shaft collar surrounded by c channels?: " + oneCollarBetweenChannels);
+            Debug.Log("how many shaft collars outside of the channels: " + collarOutsideCount);
+            if (!oneCollarBetweenChannels && collarOutsideCount < 2)
             {
                 errors.Add("If you have multiple shaft collars, it's best to put at least one in between your two shaft collars, or put the two shaft collars each outside the c-channels.");
             }
@@ -180,7 +170,7 @@ public class checkBuild : MonoBehaviour
             errors.Add("You need at least one shaft collar strategically placed on your axle, since without it, your axle will fall out of the motor very quickly.");
         }
 
-        Debug.Log(string.Join(",", errors));
+        Debug.Log(errors.Count == 0 ? "I can't find anything wrong this setup, but if anything seems wrong do let me know!" : string.Join(",", errors));
 
     }
 
@@ -192,7 +182,7 @@ public class checkBuild : MonoBehaviour
         List<int> retArray = new List<int>();
         
         for (int i = 0; i < finalParts.Count; i++) {
-            Debug.Log(i);
+            //Debug.Log(i);
             if (finalParts[i].getName() == searchedPart) {
                 retArray.Add(i);
             }

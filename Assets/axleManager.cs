@@ -60,10 +60,10 @@ public class axleManager : MonoBehaviour
             parts[selectedSlotNum].setSprite(sprite);
             parts[selectedSlotNum].setName(sprite.name);
             parts[selectedSlotNum].setEmpty(false);
-            Debug.Log(printParts());
+            //Debug.Log(printParts());
         } else
         {
-            Debug.Log("no selected part!");
+           // Debug.Log("no selected part!");
         }
         
     }

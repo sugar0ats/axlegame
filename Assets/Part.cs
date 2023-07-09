@@ -96,13 +96,13 @@ public class Part : MonoBehaviour
                 AM.setSelectedInd(index);
                 selected = true;
                 // empty = false;
-                Debug.Log("part " + index + " was selected!");
+                //Debug.Log("part " + index + " was selected!");
             } else if (selected && AM.getSelectedInd() == index) // click the same thing twice to deselect
             {
                 AM.setSelectedInd(-1);
                 selected = false;
                 // empty = true;
-                Debug.Log("part " + index + " was deselected!");
+                //Debug.Log("part " + index + " was deselected!");
             } else {
                 selected = false;
                 // empty = true;
