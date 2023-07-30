@@ -15,6 +15,8 @@ public class showErrors : MonoBehaviour
     public GameObject nextButton;
     public GameObject prevButton;
 
+    public GameObject exitButton;
+
     public int index = 0;
 
     public List<Error> sentErrors;
@@ -29,16 +31,19 @@ public class showErrors : MonoBehaviour
     void Update()
     {
 
-        
+        Debug.Log("size of errors: " + sentErrors.Count);
 
         if (sentErrors != null) {
+            
             errorIcon.overrideSprite = sentErrors[index].getImage();
             errorText.text = sentErrors[index].getDesc();
             errorName.text = sentErrors[index].getName();
 
-            if (sentErrors.Count - 1 == index) {
+            if (sentErrors.Count - 1 == index) { // last one
                 nextButton.SetActive(false);
-            } else if (index == 0) {
+                exitButton.SetActive(true);
+            } 
+            if (index == 0) {
                 prevButton.SetActive(false);
             }
         }
@@ -47,6 +52,7 @@ public class showErrors : MonoBehaviour
     public void showPanels(List<Error> errors) {
         panel.SetActive(true);
         sentErrors = errors;
+        index=0;
     }
 
     public void nextError() {

@@ -139,12 +139,7 @@ public class checkBuild : MonoBehaviour
 
 
         Debug.Log("how many shaft collars: " + countPart("shaftCollar"));
-        if (countPart("shaftCollar") == 1 && !surroundedBy(shaftCollarIndices[0], cChanIndices)) // if theres at least one shaft collar
-        {
-            addError(6);
-            
-        }
-        else if (countPart("shaftCollar") == 2)
+        if (countPart("shaftCollar") >= 2)
         {
 
             bool oneCollarBetweenChannels = false;
@@ -171,7 +166,12 @@ public class checkBuild : MonoBehaviour
                 addError(7);
             }
 
+        } else if (countPart("shaftCollar") >= 1 && !surroundedBy(shaftCollarIndices[0], cChanIndices)) // if theres at least one shaft collar
+        {
+            addError(6);
+            
         }
+        
         else
         {
             addError(8);
