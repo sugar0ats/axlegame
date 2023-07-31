@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class checkBuild : MonoBehaviour
 {
-    public axleManager AM;
-    private Part[] parts;
+    public slideManager SM;
+    private List<slidePart> parts;
 
-    private List<Part> finalParts; // don't like this and it doesnt make sense
+    private List<slidePart> finalParts; // don't like this and it doesnt make sense
 
     public List<string> allErrorDesc;
     public List<Error> errors;
@@ -24,7 +24,7 @@ public class checkBuild : MonoBehaviour
     void Start()
     {
 
-        finalParts = new List<Part>();
+        finalParts = new List<slidePart>();
         errors = new List<Error>();
 
     }
@@ -35,18 +35,13 @@ public class checkBuild : MonoBehaviour
         
     }
 
-    private List<Part> consolidateParts() {
+    private List<slidePart> consolidateParts() { // get list, regardless of if there were accidental clipping issues
 
         finalParts.Clear();
-        parts = AM.getParts();
+        parts = SM.getParts();
 
-        foreach (Part part in parts) {
-            if(!part.getEmpty()) {
-                // Debug.Log(part.getName());
-                finalParts.Add(part);
-            }
-        }
-
+        
+        // KEEP WORKING HERE: NEED TO SORT PARTS BY THEIR X COORDINATES IN THE LIST AND REUTRN THIS AS THE FINAL PARTS LIST
 
        
         return finalParts;
@@ -249,8 +244,8 @@ public class checkBuild : MonoBehaviour
     }
 
     public void debugButton() {
-        parts = AM.getParts();
-        printArray(parts);
+        parts = SM.getParts();
+        // printArray(parts);
         finalParts = consolidateParts();
         // Debug.Log("final parts: " + finalParts);
 

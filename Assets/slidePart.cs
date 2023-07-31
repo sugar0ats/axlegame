@@ -4,42 +4,45 @@ using UnityEngine;
 
 public class slidePart : MonoBehaviour
 {
+    public string partName;
+    
     public bool canMove;
     public bool dragged;
     public bool flushRight;
     public bool flushLeft;
+    public GameObject destroyZone;
 
     public Collider2D coll;
-
+    public Rigidbody2D rb;
+    public SpriteRenderer DZrenderer;
     public GameObject axle;
 
-    public string partName;
-
     public Vector3 gameObjectScreenPoint;
-
-    // public Vector3 prevMousePos;
-    // public Vector3 curMousePos;
-
-    public Rigidbody2D rb;
-
-    public float topSpeed;
-
-    public float speedMultiplier;
-
     public Vector3 force;
     public Vector3 objectCurrentPos;
     public Vector3 objectTargetPos;
+    public float topSpeed;
+    public float speedMultiplier;
+
+    public Color DELETE_ON;
+    public Color DELETE_OFF;
+
+    
     // Start is called before the first frame update
     void Start()
     {
         coll = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
 
+        destroyZone = GameObject.FindGameObjectWithTag("destroyZone");
+        DZrenderer = destroyZone.GetComponent<SpriteRenderer>();
+        axle = GameObject.FindGameObjectWithTag("axle");
+
     }
 
     public void initializePart(string name) {
         this.partName = name;
-        this.transform.position = axle.transform.position;
+
     }
 
     // Update is called once per frame
@@ -51,11 +54,12 @@ public class slidePart : MonoBehaviour
     {
         rb.velocity = force;
 
-        currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // get mouse position relative to screen
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0)) { // returns true when mouse is first pressed down
             
-            if (coll == Physics2D.OverlapPoint(currentMousePos)) {
+            if (coll == Physics2D.OverlapPoint(currentMousePos)) { // is the collider overlapping with the current mouse position?
+                force = Vector3.zero;
                 canMove = true;
             } else {
                 canMove = false;
@@ -84,14 +88,29 @@ public class slidePart : MonoBehaviour
             canMove = false;
             dragged = false;
             force = Vector3.zero;
+
+            if (this.gameObject.transform.position.x >= destroyZone.transform.position.x) {
+                Destroy(this.gameObject);
+            
+            }
         }
 
-        if (force != Vector3.zero) {
-            Debug.Log(force);
+
+        if (this.gameObject.transform.position.x >= destroyZone.transform.position.x) {
+            DZrenderer.color = DELETE_ON;
+            Debug.Log("in destroy zone");
+        } else {
+            DZrenderer.color = DELETE_OFF;
+            Debug.Log("out of destroy zone");
         }
+        
 
         prevMousePos = currentMousePos;
         
+    }
+
+    public string getName() {
+        return partName;
     }
 
     

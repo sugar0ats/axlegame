@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - part
+  - destroyZone
+  - axle
   layers:
   - Default
   - TransparentFX

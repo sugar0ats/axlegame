@@ -5,22 +5,33 @@ using UnityEngine;
 public class slideManager : MonoBehaviour {
     public GameObject axle;
 
-    public GameObject slideEx;
+    public List<slidePart> parts;
+
+    public GameObject instantiationMarker;
+    
+
+    public Vector2 addedPosition;
+
 
 
     void Start() {
-
+        addedPosition = new Vector2(instantiationMarker.transform.position.x, axle.transform.position.y);
     }
 
     void Update() {
 
     }
 
-    public void slidePartIn(GameObject obj) {
-        // slidePart newPart = Instantiate<slidePart>(part, axle.transform);
-        Instantiate(obj, axle.transform.position, Quaternion.identity);
-        Debug.Log("part instantiated");
-        // newPart.initializePart("example");
+    public void slidePartIn(slidePart obj) {
+
+        slidePart part = Instantiate<slidePart>(obj, addedPosition, Quaternion.identity);
+        part.initializePart(obj.partName);
+        // parts.Add(part); // not necessarily in order
+
+    }
+
+    public List<slidePart> getParts() {
+        return parts;
     }
 
 }
